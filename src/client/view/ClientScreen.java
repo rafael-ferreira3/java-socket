@@ -31,7 +31,6 @@ public class ClientScreen {
 
     void enviarMsg(){
         String msg = msgAreaText.getText();
-        System.out.println(msg);
         if(client != null && !msg.isEmpty()){
             String encrypt = Criptografia.encrypt(msg);
             msgAreaText.setText("");

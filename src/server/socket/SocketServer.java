@@ -1,5 +1,6 @@
 package server.socket;
 
+import server.helper.ConnectionHandler;
 import utils.Constants;
 import utils.criptografia.Criptografia;
 
@@ -14,8 +15,6 @@ public class SocketServer extends Thread{
     private ServerSocket server;
 
     private final JTextArea consoleTextArea;
-
-    private ObjectInputStream msg_in;
 
     public SocketServer(JTextArea textArea) {
         consoleTextArea = textArea;
@@ -37,15 +36,7 @@ public class SocketServer extends Thread{
             show("Conexao de: " +
                     soc.getInetAddress().getHostAddress());
 
-            msg_in = new ObjectInputStream(soc.getInputStream());
-
-            String msg;
-            do{
-                msg = (String)msg_in.readObject();
-                show("Mensagem Criptografada: "+msg);
-                show("Mensagem Descriptografada: "+ Criptografia.descrypt(msg));
-                show("\n");
-            }while (!msg.toUpperCase().equals(Constants.END_DELIMITER));
+            new Thread(new ConnectionHandler(soc,consoleTextArea)).start();
         }
     }
 
